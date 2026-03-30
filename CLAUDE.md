@@ -208,6 +208,25 @@ python tools/legend_matcher.py \
 
 Key API: `get_embedding(model, proj, coords, feats, prim_ids, layer_ids, cu_seqlens) → Tensor(512,)`
 
+### `model/vecformer/siamese_head.py` -- Siamese Cross-Attention Head
+
+`VecFormerSiameseHead` replaces the panoptic CAD decoder for search tasks.
+Legend tokens (Q, 64) act as queries into plan tokens (N, 64) via multi-head
+cross-attention, producing a per-primitive similarity score in [0, 1].
+
+### `tools/siamese_inference.py` -- Siamese Search CLI
+
+```bash
+python tools/siamese_inference.py \
+    --checkpoint weights/vecformer_archcad.pth \
+    --legend legend_crop.json \
+    --floor_plan floor_plan.json \
+    --output siamese_matches.json \
+    --threshold 0.85
+```
+
+Outputs clustered match groups with bounding boxes and primitive IDs.
+
 ### `utils/vector_healer.py` -- PDF Vector Extraction & Healing
 
 Extracts vector paths from PDFs via PyMuPDF, merges fragmented segments via
